@@ -56,3 +56,14 @@ service "varnishlog" do
   supports :restart => true, :reload => true
   action [ :enable, :start ]
 end
+
+# Rotate logs every day
+if node[:platform] == 'redhat'
+	template node['varnish']['logrotate'] do
+		action :create
+		source "logrotate.erb"
+		owner "root"
+		group "root"
+		mode 0644
+	end
+end
